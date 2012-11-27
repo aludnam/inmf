@@ -1,4 +1,5 @@
-function [w,h]=nmf(v,winit,hinit,peval)
+function [w,h,peval]=nmf(v,w,h,peval,verbose)
+% [w,h,peval]=nmf(v,w,h,peval,verbose)
 % Non-negative matrix factorisation updates minimising KL divergence KL(V|WH)
 % References : D.D. Lee and H.S. Seung. Algorithms for non-negative matrix
 % factorization. Advances in neural information processing systems, 13, 2001.
@@ -8,25 +9,77 @@ function [w,h]=nmf(v,winit,hinit,peval)
 % h    : K x T time factor (intensities)
 % K is the rank of factorisation (number of sources).
 %
-% fixvec - vector which component should be fixed: eg [2 3] will
-% fix second and third component while varying the first...
+% peval - (optional) setting of the evaluation parameters, if not specified
+% parameters are set to default values (see nested function setDefaultValuesPeval). 
 
-checkv(v)
-N=size(v,1); T=size(v,2); K=size(winit,2);
-peval=setDefaultValuesPeval(peval);
-[dovec_w, dovec_h]=setDoVec(K,peval.fix_bg_w,peval.fix_bg_h);
+checkin(v,w,h)
 
+if ~exist('peval','var'); peval=[];end
+if ~exist('verbose','var'); verbose=1;end
+peval=setDefaultValuesPeval(peval); % set default values if not specified on input
 
+K=size(w,2); % number of components
+[dovec_w, dovec_h]=setDoVec(K,peval.fixBg_w,peval.fixBg_h);
+
+dall=zeros(1, ceil(peval.maxiter/peval.checkTermCycle));
+indexd=1;
+
+for ii=1:peval.maxiter    
+    
+    % h update:    
+    y1=w'*(v./(w*h));
+    sw = sum(w,1)';
+    h(dovec_h,:)= bsxfun(@rdivide,h(dovec_h,:).*y1(dovec_h,:),sw(dovec_h));
+    h=max(h,eps); % adjust small values to avoid undeflow
+    
+    % w update:
+    y2=(v./(w*h))*h';
+    sh=sum(h,2)';    
+    w(:,dovec_w)=bsxfun(@rdivide,w(:,dovec_w).*(y2(:,dovec_w)),sh(dovec_w));
+    w=max(w,eps); % adjust small values to avoid undeflow
+    
+    % L1 normalization of w:
+    sw = sum(w,1)'; % summation after the update of w...
+    w = bsxfun(@rdivide, w, sw');
+    h = bsxfun(@times, h, sw); % this is to keep the product WH constant after normalisation of w
+    
+    % Check termination and print values of KL divergence.
+    if rem(ii,peval.checkTermCycle)==0
+        d = ddivergence(v, w*h);
+        if d < peval.dterm % Check termination.
+            break
+        end
+        if verbose
+            fprintf('Cycle %g D-divergence %g\n',ii,d)
+            if verbose > 1
+                dall(indexd)=d;
+                plotprogress(w,dall(1:indexd),peval)
+                indexd=indexd+1;
+            end
+        end
+        
+    end
 end
+
+peval.ddiv_end = ddivergence(v, w*h); % final values of the d-divergence
+peval.numiter = ii;
+
+if ii==peval.maxiter
+    mfprintf(peval.fid,'\nMaximum number of iterations (%g) reaached!\n', ii)
+end
+
+mfprintf(peval.fid,'\nTermination D-divergence value is (%g).\n', peval.ddiv_end)
+
+end % of main function
 
 %%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%
 
 % Nested functions:
 
-function checkv(v)
-% test for negative values in v
-if min(v(:)) < 0
+function checkin(v,w,h) % Test for negative values in v, w and h.
+
+if any([min(v(:))<0, min(w(:))<0, min(h(:)) < 0])
     error('Data entries can not be negative!');
 end
 end
@@ -34,30 +87,17 @@ end
 function peval=setDefaultValuesPeval(peval)
 
 if ~isfield(peval, 'dterm'); peval.dterm = 1; end %termination criterion
-if ~isfield(peval, 'ddterm'); peval.ddterm = 1; end %termination criterion
 if ~isfield(peval, 'maxiter'); peval.maxiter = 1000; end
-if ~isfield(peval,'showimage'); peval.showimage =0; end %showing progres images
-if peval.bgcomp
-    if ~isfield(peval, 'fix_bg_w')
-        peval.fix_bg_w=1; % last (background) component w is fixed and not updated
-    end
-    if ~isfield(peval, 'fix_bg_h')
-        peval.fix_bg_h=1; % last (background) component h is fixed and not updated
-    end
-end
+if ~isfield(peval, 'fixBg_w'); peval.fixBg_w=1; end % last (background) component w not updated
+if ~isfield(peval, 'fixBg_h'); peval.fixBg_h=0; end % last (background) component h not updated
+if ~isfield(peval, 'checkTermCycle'); peval.checkTermCycle=50; end % how often to check the termination criterion (KL divergence)
+if ~isfield(peval, 'fid'); peval.fid=[]; end % 
+
 end
 
-function [dovec_w, dovec_h]=setDoVec(K,fix_bg_w,fix_bg_h)
-if fix_bg_w
-    dovec_w=1:K-1;
-else
-    dovec_w=1:K;
-end
-if fix_bg_h
-    dovec_h=1:K-1;
-else
-    dovec_h=1:K;
-end
+function [dovec_w, dovec_h]=setDoVec(K,fixBg_w,fixBg_h)
+    dovec_w=1:K-fixBg_w;   
+    dovec_h=1:K-fixBg_h;    
 end
 
 
