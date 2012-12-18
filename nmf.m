@@ -10,7 +10,7 @@ function [w,h,peval]=nmf(v,w,h,peval,verbose)
 % K is the rank of factorisation (number of sources).
 %
 % peval - (optional) setting of the evaluation parameters, if not specified
-% parameters are set to default values (see nested function setDefaultValuesPeval). 
+% parameters are set to default values (see nested function setDefaultValuesPeval).
 
 checkin(v,w,h)
 
@@ -24,24 +24,28 @@ K=size(w,2); % number of components
 dall=zeros(1, ceil(peval.maxiter/peval.checkTermCycle));
 indexd=1;
 
-for ii=1:peval.maxiter    
+for ii=1:peval.maxiter
     
-    % h update:    
+    % h update:
     y1=w'*(v./(w*h));
     sw = sum(w,1)';
-    h(dovec_h,:)= bsxfun(@rdivide,h(dovec_h,:).*y1(dovec_h,:),sw(dovec_h));
+%     h(dovec_h,:)= bsxfun(@rdivide,h(dovec_h,:).*y1(dovec_h,:),sw(dovec_h));
+    h(dovec_h,:)= (h(dovec_h,:).*y1(dovec_h,:))./repmat(sw(dovec_h),[1,size(h,2)]);
     h=max(h,eps); % adjust small values to avoid undeflow
     
     % w update:
     y2=(v./(w*h))*h';
-    sh=sum(h,2)';    
-    w(:,dovec_w)=bsxfun(@rdivide,w(:,dovec_w).*(y2(:,dovec_w)),sh(dovec_w));
+    sh=sum(h,2)';
+%     w(:,dovec_w)=bsxfun(@rdivide,w(:,dovec_w).*(y2(:,dovec_w)),sh(dovec_w));
+    w(:,dovec_w)=(w(:,dovec_w).*y2(:,dovec_w))./repmat(sh(dovec_w),[size(w,1),1]);
     w=max(w,eps); % adjust small values to avoid undeflow
     
     % L1 normalization of w:
     sw = sum(w,1)'; % summation after the update of w...
-    w = bsxfun(@rdivide, w, sw');
-    h = bsxfun(@times, h, sw); % this is to keep the product WH constant after normalisation of w
+%     w = bsxfun(@rdivide, w, sw');
+%     h = bsxfun(@times, h, sw); % this is to keep the product WH constant after normalisation of w
+    w=w./repmat(sw',[size(w,1),1]); 
+    h=h./repmat(sw, [1,size(h,2)]);
     
     % Check termination and print values of KL divergence.
     if rem(ii,peval.checkTermCycle)==0
@@ -52,9 +56,8 @@ for ii=1:peval.maxiter
         if verbose
             fprintf('Cycle %g D-divergence %g\n',ii,d)
             if verbose > 1
-                dall(indexd)=d;
-                plotprogress(w,dall(1:indexd),peval)
-                indexd=indexd+1;
+                imageTiles(reshape(w,peval.nx,peval.ny,peval.K),100);
+%                 plotKL(ii,d,101)
             end
         end
         
@@ -91,13 +94,21 @@ if ~isfield(peval, 'maxiter'); peval.maxiter = 1000; end
 if ~isfield(peval, 'fixBg_w'); peval.fixBg_w=1; end % last (background) component w not updated
 if ~isfield(peval, 'fixBg_h'); peval.fixBg_h=0; end % last (background) component h not updated
 if ~isfield(peval, 'checkTermCycle'); peval.checkTermCycle=50; end % how often to check the termination criterion (KL divergence)
-if ~isfield(peval, 'fid'); peval.fid=[]; end % 
+if ~isfield(peval, 'fid'); peval.fid=[]; end %
 
 end
 
 function [dovec_w, dovec_h]=setDoVec(K,fixBg_w,fixBg_h)
-    dovec_w=1:K-fixBg_w;   
-    dovec_h=1:K-fixBg_h;    
+dovec_w=1:K-fixBg_w;
+dovec_h=1:K-fixBg_h;
+end
+
+function plotKL(d,ii,h)
+figure(h);
+hold on;
+col=rand(3,1);
+plot(ii,d,'.','color',col);
+grid on;
 end
 
 

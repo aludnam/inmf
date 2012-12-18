@@ -1,28 +1,29 @@
-function [w,h,peval]=inmf(v,K,verbose)
+function [w,h,peval]=inmf(d,K,peval,verbose)
 
 if ~exist('peval','var'); peval=[];end
 if ~exist('verbose','var'); verbose=1;end
-peval=setDefaultValuesPeval(peval)
+peval=setDefaultValuesPeval(peval);
 
-checkin(v);
-[N,T]=size(v);
+checkin(d);
+[N,T]=size(d);
+meanv=mean(d(:));
 
-for restart=1:K
+for restart=1:K-1
     
-    hinit = rand(K,T);
-    winit = rand(N,K);
+    % Random initialisation + last component as a flat background:
+    [winit,hinit]=initwh(N,T,K,meanv,peval.bg);
+    printmsg(peval.fid,restart)
     
-    if restart>1
-        printmsg(peval.fid,restart)
+    if restart>1        
         [sx, isx] = sort(sum(w.^2,1), 'descend'); % L2 norm sorting of w.
         
-        winit(:,1:restart)=w(:,isx(1:indexrestart));
-        hinit(1:restart,:)=h(isx(1:indexrestart),:);
+        winit(:,1:restart)=w(:,isx(1:restart));
+        hinit(1:restart,:)=h(isx(1:restart),:);
     end
     
-    [w,h,peval]=nmf(v,winit,hinit,peval,verbose);
-    
+    [w,h,peval]=nmf(d,winit,hinit,peval,verbose);   
 end
+
 end% of main function
 
 %%%%%%%%%%%%%%%%%%%
@@ -32,19 +33,25 @@ end% of main function
 
 function peval=setDefaultValuesPeval(peval)
 
-if ~isfield(peval, 'fid'); peval.fid=[]; end %
+if ~isfield(peval, 'fid'); peval.fid=1; end % Print on the screen only. Set to peval.fid=[] for no message.  
+if ~isfield(peval, 'bg'); peval.bg=eps; end % Default background
 
 end
 
-function checkin(v) % Test for negative values in v, w and h.
+function checkin(d) % Test for negative values in d, w and h.
 
-if min(v(:))<0
+if min(d(:))<0
     error('Data entries can not be negative!');
 end
+
 end
 
 
 function printmsg(fid,restart)
+
 mfprintf(fid,'\n===================================\n')
-mfprintf(fid,'\nRestart %g: [1:%g] L2 sorted components reused. The rest initialised at random.\n', restart,restart);
+if restart>1
+    mfprintf(fid,'\nRestart %g: [1:%g] L2 sorted components reused. The rest initialised at random.\n', restart-1,restart-1);
+end
+
 end
