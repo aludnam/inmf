@@ -1,10 +1,10 @@
+clear peval
 peval.bg = 100;
-peval.Kinput = 3;
 peval.maxiter=100;
-savethis =0;
+savethis =1;
 verbose =2; 
-load dpixc
+% load dpixc
 
 tic
-inmf_main(dpixc,peval,savethis,2);
+inmf_main(dpixc,peval,savethis,verbose);
 toc

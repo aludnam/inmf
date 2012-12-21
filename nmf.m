@@ -56,7 +56,8 @@ for ii=1:peval.maxiter
         if verbose
             fprintf('Cycle %g D-divergence %g\n',ii,d)
             if verbose > 1
-                imageTiles(reshape(w,peval.nx,peval.ny,peval.K),100);
+                fignum=100;                
+                imageTiles(reshape(w,peval.nx,peval.ny,peval.K),fignum);
 %                 plotKL(ii,d,101)
             end
         end
@@ -106,8 +107,7 @@ end
 function plotKL(d,ii,h)
 figure(h);
 hold on;
-col=rand(3,1);
-plot(ii,d,'.','color',col);
+plot(ii,d,'.');
 grid on;
 end
 

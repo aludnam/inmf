@@ -4,7 +4,7 @@ if ~exist('peval','var'); peval=[];end
 if ~exist('verbose','var'); verbose=1;end
 peval=setDefaultValuesPeval(peval);
 
-checkin(d);
+checkin(d); % Test for negative values in d.
 [N,T]=size(d);
 meanv=mean(d(:));
 
@@ -12,7 +12,7 @@ for restart=1:K-1
     
     % Random initialisation + last component as a flat background:
     [winit,hinit]=initwh(N,T,K,meanv,peval.bg);
-    printmsg(peval.fid,restart)
+    printmsg(peval.fid,restart,K)
     
     if restart>1        
         [sx, isx] = sort(sum(w.^2,1), 'descend'); % L2 norm sorting of w.
@@ -38,7 +38,7 @@ if ~isfield(peval, 'bg'); peval.bg=eps; end % Default background
 
 end
 
-function checkin(d) % Test for negative values in d, w and h.
+function checkin(d) % Test for negative values in d.
 
 if min(d(:))<0
     error('Data entries can not be negative!');
@@ -47,11 +47,7 @@ end
 end
 
 
-function printmsg(fid,restart)
-
+function printmsg(fid,restart,K)
 mfprintf(fid,'\n===================================\n')
-if restart>1
-    mfprintf(fid,'\nRestart %g: [1:%g] L2 sorted components reused. The rest initialised at random.\n', restart-1,restart-1);
-end
-
+mfprintf(fid,'\nRestart %g/%g: [1:%g] L2 sorted components reused. The rest initialised at random.\n', restart,K-1,restart);
 end
