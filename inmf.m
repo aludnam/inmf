@@ -2,6 +2,7 @@ function [w,h,peval]=inmf(d,K,peval,verbose)
 
 if ~exist('peval','var'); peval=[];end
 if ~exist('verbose','var'); verbose=1;end
+if isfield(peval,'ddiv'); peval.ddiv=[];end
 peval=setDefaultValuesPeval(peval);
 
 checkin(d); % Test for negative values in d.
@@ -21,10 +22,12 @@ for restart=1:K-1
         hinit(1:restart,:)=h(isx(1:restart),:);
     end
     
-    [w,h,peval]=nmf(d,winit,hinit,peval,verbose);   
+    [w,h,peval]=nmf(d,winit,hinit,peval,verbose);
+    
+    peval.ddiv(restart) = ddivergence(d, w*h); % final values of the d-divergence
 end
 
-end% of main function
+end % of main function
 
 %%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%

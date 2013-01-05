@@ -1,6 +1,6 @@
 function d = ddivergence(A,B)
 % d = ddivergence(A,B);
-% Computes generalised Kullback?Leibler divergence KL(A|B) between matrices A and B.
+% Computes generalised Kullback-Leibler divergence KL(A|B) between matrices A and B.
 
 dm = A.*log (A./B) - A + B;
 d = sum(dm(:));

@@ -9,8 +9,8 @@ function [w,h,peval]=nmf(v,w,h,peval,verbose)
 % h    : K x T time factor (intensities)
 % K is the rank of factorisation (number of sources).
 %
-% peval - (optional) setting of the evaluation parameters, if not specified
-% parameters are set to default values (see nested function setDefaultValuesPeval).
+% peval     - (optional) Setting of the evaluation parameters, if not specified.
+%           See "setDefaultValuesPeval.m" for more information. 
 
 checkin(v,w,h)
 
@@ -65,14 +65,11 @@ for ii=1:peval.maxiter
     end
 end
 
-peval.ddiv_end = ddivergence(v, w*h); % final values of the d-divergence
 peval.numiter = ii;
 
 if ii==peval.maxiter
     mfprintf(peval.fid,'\nMaximum number of iterations (%g) reaached!\n', ii)
 end
-
-mfprintf(peval.fid,'\nTermination D-divergence value is (%g).\n', peval.ddiv_end)
 
 end % of main function
 
@@ -86,17 +83,6 @@ function checkin(v,w,h) % Test for negative values in v, w and h.
 if any([min(v(:))<0, min(w(:))<0, min(h(:)) < 0])
     error('Data entries can not be negative!');
 end
-end
-
-function peval=setDefaultValuesPeval(peval)
-
-if ~isfield(peval, 'dterm'); peval.dterm = 1; end %termination criterion
-if ~isfield(peval, 'maxiter'); peval.maxiter = 1000; end
-if ~isfield(peval, 'fixBg_w'); peval.fixBg_w=1; end % last (background) component w not updated
-if ~isfield(peval, 'fixBg_h'); peval.fixBg_h=0; end % last (background) component h not updated
-if ~isfield(peval, 'checkTermCycle'); peval.checkTermCycle=50; end % how often to check the termination criterion (KL divergence)
-if ~isfield(peval, 'fid'); peval.fid=[]; end %
-
 end
 
 function [dovec_w, dovec_h]=setDoVec(K,fixBg_w,fixBg_h)
