@@ -13,7 +13,7 @@ for restart=1:K-1
     
     % Random initialisation + last component as a flat background:
     [winit,hinit]=initwh(N,T,K,meanv,peval.bg);
-    printmsg(peval.fid,restart,K)
+    printmsg(restart,K)
     
     if restart>1        
         [sx, isx] = sort(sum(w.^2,1), 'descend'); % L2 norm sorting of w.
@@ -36,7 +36,6 @@ end % of main function
 
 function peval=setDefaultValuesPeval(peval)
 
-if ~isfield(peval, 'fid'); peval.fid=1; end % Print on the screen only. Set to peval.fid=[] for no message.  
 if ~isfield(peval, 'bg'); peval.bg=eps; end % Default background
 
 end
@@ -50,7 +49,7 @@ end
 end
 
 
-function printmsg(fid,restart,K)
-mfprintf(fid,'\n===================================\n')
-mfprintf(fid,'\nRestart %g/%g: [1:%g] L2 sorted components reused. The rest initialised at random.\n', restart,K-1,restart);
+function printmsg(restart,K)
+fprintf('\n===================================\n')
+fprintf('\nRestart %g/%g: [1:%g] L2 sorted components reused. The rest initialised at random.\n', restart,K-1,restart);
 end

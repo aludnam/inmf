@@ -6,11 +6,11 @@ function inmf_main(dataIn,peval,savethis,verbose)
 %
 % peval:    (optional) Parameters of the evaluation:
 %           peval.nRuns - specifiy the number of runs of inmf
-%           peval.Kinput - specifiy the number of sources (same for all patches)
 %           peval.bg - specify the background
 %           peval.patchSizeX - specify the size of the patch
 %           peval.patchSizeY - specify the size of the patch
 %           peval.patchOverlap - specify the overlap of the patches
+%           peval.Kinput - specify number of sources. if specified this way it will be the same for all patches! 
 %           ....
 %           See "setDefaultValuesPeval.m" for default values.
 %
@@ -61,15 +61,13 @@ for indexRun=1:peval.nRuns
                 peval.K=estimateK(d,peval.threshold_pca); % Estimation of the number of sources.
             end
             
-            % Initialising log-file:
+            % Creates directory for saving the results. 
             if savethis
-                peval.path_results = [cd '/P' num2str(patchX) num2str(patchY) '/results_K' num2str(peval.K) '_run' num2str(indexRun)];
-                mkdir(peval.path_results)             
-                peval.computed=datestr(now);
-                peval.fid=initlog(peval.path_results);                
-            else
-                peval.fid = 1; %Messages only on the screen.
+                peval.path_results = [cd '/P' num2str(patchX) num2str(patchY) '/results_run' num2str(indexRun)];
+                mkdir(peval.path_results)                             
             end
+            
+            peval.computed=datestr(now);
             
             if verbose
                 printmsg(patchX,patchY,peval);
@@ -92,12 +90,12 @@ end
 
 function printmsg(patchX,patchY,peval)
 
-mfprintf(peval.fid,'Patch [%g %g]:\n',patchX, patchY);
-mfprintf(peval.fid,'Top-left cornere of the patch [%g %g]\n',peval.cornerNW);
-mfprintf(peval.fid,'Bottom-right cornere of the patch [%g %g]\n',peval.cornerSE);
-mfprintf(peval.fid,'Patch size is [%g %g] pixels.\n',peval.nx, peval.ny);
-mfprintf(peval.fid,'Number of sources: %g\n',peval.K);
+fprintf('Patch [%g %g]:\n',patchX, patchY);
+fprintf('Top-left cornere of the patch [%g %g]\n',peval.cornerNW);
+fprintf('Bottom-right cornere of the patch [%g %g]\n',peval.cornerSE);
+fprintf('Patch size is [%g %g] pixels.\n',peval.nx, peval.ny);
+fprintf('Number of sources: %g\n',peval.K);
 if isfield(peval,'path_results')
-    mfprintf(peval.fid,'Results saved in : %s\n',peval.path_results);
+    fprintf('Results saved in : %s\n',peval.path_results);
 end
 end

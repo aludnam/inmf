@@ -68,7 +68,7 @@ end
 peval.numiter = ii;
 
 if ii==peval.maxiter
-    mfprintf(peval.fid,'\nMaximum number of iterations (%g) reaached!\n', ii)
+    fprintf('\nMaximum number of iterations (%g) reaached!\n', ii)
 end
 
 end % of main function
