@@ -19,7 +19,7 @@ for restart=1:K-1
         [sx, isx] = sort(sum(w.^2,1), 'descend'); % L2 norm sorting of w.
         
         winit(:,1:restart)=w(:,isx(1:restart));
-        hinit(1:restart,:)=h(isx(1:restart),:);
+        hinit(1:restart,:)=h(isx(1:restart),:);        
     end
     
     [w,h,peval]=nmf(d,winit,hinit,peval,verbose);

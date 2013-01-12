@@ -36,7 +36,7 @@ for ii=1:peval.maxiter
     % w update:
     y2=(v./(w*h))*h';
     sh=sum(h,2)';
-%     w(:,dovec_w)=bsxfun(@rdivide,w(:,dovec_w).*(y2(:,dovec_w)),sh(dovec_w));
+%    w(:,dovec_w)=bsxfun(@rdivide,w(:,dovec_w).*(y2(:,dovec_w)),sh(dovec_w));
     w(:,dovec_w)=(w(:,dovec_w).*y2(:,dovec_w))./repmat(sh(dovec_w),[size(w,1),1]);
     w=max(w,eps); % adjust small values to avoid undeflow
     
@@ -45,7 +45,7 @@ for ii=1:peval.maxiter
 %     w = bsxfun(@rdivide, w, sw');
 %     h = bsxfun(@times, h, sw); % this is to keep the product WH constant after normalisation of w
     w=w./repmat(sw',[size(w,1),1]); 
-    h=h./repmat(sw, [1,size(h,2)]);
+    h=h.*repmat(sw, [1,size(h,2)]);
     
     % Check termination and print values of KL divergence.
     if rem(ii,peval.checkTermCycle)==0
@@ -96,6 +96,3 @@ hold on;
 plot(ii,d,'.');
 grid on;
 end
-
-
-
