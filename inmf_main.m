@@ -31,7 +31,7 @@ peval=setDefaultValuesPeval(peval);
 
 maxMeanDataIn=max(max(mean(dataIn,3)));
 
-for indexRun=1:peval.nRuns
+for indexRun=peval.nRuns
     for patchX=1:nPatchX
         for patchY=1:nPatchY
             close all % closes open figures
