@@ -9,7 +9,7 @@ checkin(d); % Test for negative values in d.
 [N,T]=size(d);
 meanv=mean(d(:));
 
-for restart=1:K-1
+for restart=1:K
     
     % Random initialisation + last component as a flat background:
     [winit,hinit]=initwh(N,T,K,meanv,peval.bg);
@@ -18,13 +18,14 @@ for restart=1:K-1
     if restart>1        
         [sx, isx] = sort(sum(w.^2,1), 'descend'); % L2 norm sorting of w.
         
-        winit(:,1:restart)=w(:,isx(1:restart));
-        hinit(1:restart,:)=h(isx(1:restart),:);        
+        winit(:,1:restart-1)=w(:,isx(1:restart-1));
+        hinit(1:restart-1,:)=h(isx(1:restart-1),:);        
     end
     
     [w,h,peval]=nmf(d,winit,hinit,peval,verbose);
     
     peval.ddiv(restart) = ddivergence(d, w*h); % final values of the d-divergence
+    meanv=mean(mean(d-w(:,1:restart)*h(1:restart,:))); % mean value (+ background) of the data minus alrady estimate components
 end
 
 end % of main function
