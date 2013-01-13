@@ -25,7 +25,7 @@ for restart=1:K
     [w,h,peval]=nmf(d,winit,hinit,peval,verbose);
     
     peval.ddiv(restart) = ddivergence(d, w*h); % final values of the d-divergence
-    meanv=mean(mean(d-w(:,1:restart)*h(1:restart,:))); % mean value (+ background) of the data minus alrady estimate components
+    %meanv=mean(mean(d-w(:,1:restart)*h(1:restart,:))); % mean value (+ background) of the data minus alrady estimate components
 end
 
 end % of main function
@@ -49,8 +49,7 @@ end
 
 end
 
-
 function printmsg(restart,K)
 fprintf('\n===================================\n')
-fprintf('\nRestart %g/%g: [1:%g] L2 sorted components reused. The rest initialised at random.\n', restart,K-1,restart);
+fprintf('\nRestart %g/%g: L2 sorted components [1:%g] reused.\n', restart,K,restart);
 end

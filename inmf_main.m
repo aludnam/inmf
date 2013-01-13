@@ -60,13 +60,7 @@ for indexRun=peval.nRuns
             else
                 peval.K=estimateK(d,peval.threshold_pca); % Estimation of the number of sources.
             end
-            
-            % Creates directory for saving the results. 
-            if savethis
-                peval.path_results = [cd '/P' num2str(patchX) num2str(patchY) '/results_run' num2str(indexRun)];
-                mkdir(peval.path_results)                             
-            end
-            
+                       
             peval.computed=datestr(now);
             
             if verbose
@@ -81,6 +75,8 @@ for indexRun=peval.nRuns
             
             % Saving data:
             if savethis
+                peval.path_results = [cd '/P' num2str(patchX) num2str(patchY) '/results_run' num2str(indexRun)];
+                mkdir(peval.path_results)                             
                 savedata(peval.path_results,w,h,peval)
             end
         end
