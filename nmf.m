@@ -48,7 +48,7 @@ for ii=1:peval.maxiter
     h=h.*repmat(sw, [1,size(h,2)]);
     
     % Check termination and print values of KL divergence.
-    if rem(ii,peval.checkTermCycle)==0
+    if or(ii==1,rem(ii,peval.checkTermCycle)==0)
         d = ddivergence(v, w*h);
         if d < peval.dterm % Check termination.
             break
@@ -58,6 +58,9 @@ for ii=1:peval.maxiter
             if verbose > 1
                 fignum=100;                
                 imageTiles(reshape(w,peval.nx,peval.ny,peval.K),fignum);
+                figure(101);
+                bar(mean(h(1:end-1,:),2)); 
+                
 %                 plotKL(ii,d,101)
             end
         end
