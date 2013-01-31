@@ -17,7 +17,7 @@ for patchX=1:nPatchX
         [cornerTL, cornerBR]=patchCorner(patchX,patchY,patchSizeX,patchSizeY,patchOverlap,sx,sy);
         col = rand(1,3);
 
-        textToShow=['B' num2str(patchX) num2str(patchY)];
+        textToShow=['P' num2str(patchX) num2str(patchY)];
         text (0.5*(cornerBR(2)+cornerTL(2))-3, cornerTL(1)+0.5*(cornerBR(1)-cornerTL(1))-2,textToShow,'color',1-[eps eps eps])
         lineW=3;
         if exist('threshold_pca','var')       

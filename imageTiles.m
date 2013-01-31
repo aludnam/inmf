@@ -1,17 +1,25 @@
-function imageTiles(im,h)
-% imageTiles(im,h)
+function imageTiles(im,h,a,b)
+% imageTiles(im,h,a,b)
+% 
+% Tiles the frames of the 3D image 
+% im - input image (3D) 
+% h - (optional) handle of a new figure 
+% a - (optional) number of frames along vertical direction
+% b - (optional) number of frames along horizontal direction
 
-if ~exist('h','var'); h=0; end
+if exist('h','var')
+    figure(h); 
+else 
+    figure; 
+end
 
 cmap = 'gray';
 s=size(im,3);
-a=round(sqrt(s));
-b=ceil(s/a);
-
-if h 
-    figure(h);
-else
-    figure;
+if ~exist('a','var')
+    a=round(sqrt(s));
+end
+if ~exist('b','var')
+    b=ceil(s/a);
 end
 
 for ii=1:s
