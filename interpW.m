@@ -1,4 +1,5 @@
 function [wi,nxi,nyi]=interpW(w,nx,ny,intFac)
+%[wi,nxi,nyi]=interpW(w,nx,ny,intFac)
 
 K=size(w,2); 
 wr=reshape(w,nx,ny,K); 
