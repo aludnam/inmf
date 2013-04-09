@@ -6,10 +6,9 @@ cmap='gray';
 
 [nPatchX,nPatchY]=npatch(sx,sy,patchSizeX,patchSizeY,patchOverlap);
 
-dipshow(mean(im,3))
-% imagesc(mean(im,3)), 
-% set (gca, 'DataAspectRatio',[1 1 1],'xtick',[],'ytick',[]);
-% colormap(cmap);
+imagesc(mean(im,3)),
+set (gca, 'DataAspectRatio',[1 1 1],'xtick',[],'ytick',[]);
+colormap(cmap);
 maxMeanDataIn=max(max(mean(im,3)));
 
 for patchX=1:nPatchX

@@ -15,3 +15,22 @@ function [out,nxi,nyi]=makeHiRes(w,h,nx,ny,rf,pow)
 
 [wi,nxi,nyi]=interpW(w,nx,ny,rf);
 out=reshape(normL(wi.^pow)*mean(h,2),nxi,nyi);
+end
+
+function [wi,nxi,nyi]=interpW(w,nx,ny,intFac)
+%[wi,nxi,nyi]=interpW(w,nx,ny,intFac)
+
+K=size(w,2); 
+wr=reshape(w,nx,ny,K); 
+
+[xCoarse, yCoarse] = meshgrid(0:ny-1,0:nx-1);
+nxi=intFac*nx; 
+nyi=intFac*ny; 
+[xFine, yFine] = meshgrid(linspace(0,nx-1,nxi),linspace(0,ny-1,nyi));
+wri=zeros(nxi,nyi,K); 
+for k=1:K
+    wri(:,:,k) = interp2(xCoarse,yCoarse,wr(:,:,k),xFine,yFine,'bicubic');
+end
+wi_tmp=reshape(wri,nxi*nyi,K);
+wi=normL(wi_tmp,1,1);
+end
