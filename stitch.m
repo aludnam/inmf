@@ -63,15 +63,19 @@ end
 function wxy=makeWindow(s,overlapIm)
 ov=overlapIm-1; % overlap starts from zero (removing the border pixels due to possible artefacts)
 
-[x,y]=meshgrid(1:s(1),1:s(2));
+[x,y]=meshgrid(1:s(2),1:s(1));
 
 mx1=x<=ov;
-mx2=(s(1)-x)<ov;
-wx=1/ov*((x-1).*mx1+(s(1)-x).*mx2)+~(mx1+mx2);
+mx2=(s(2)-x)<ov;
+wx1=1/ov*(x-1).*mx1+~mx1;
+wx2=1/ov*(s(2)-x).*mx2+~mx2;
+wx=min(wx1,wx2);
 
 my1=y<=ov;
 my2=(s(1)-y)<ov;
-wy=1/ov*((y-1).*my1+(s(1)-y).*my2)+~(my1+my2);
+wy1=1/ov*(y-1).*my1+~my1;
+wy2=1/ov*(s(1)-y).*my2+~my2;
+wy=min(wy1,wy2);
 
 wxy=wx.*wy;
 end
