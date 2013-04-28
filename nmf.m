@@ -21,9 +21,6 @@ peval=setDefaultValuesPeval(peval); % set default values if not specified on inp
 K=size(w,2); % number of components
 [dovec_w, dovec_h]=setDoVec(K,peval.fixBg_w,peval.fixBg_h);
 
-dall=zeros(1, ceil(peval.maxiter/peval.checkTermCycle));
-indexd=1;
-
 for ii=1:peval.maxiter
     
     % h update:
@@ -59,9 +56,7 @@ for ii=1:peval.maxiter
                 fignum=100;                
                 imageTiles(reshape(w,peval.nx,peval.ny,peval.K),fignum);
                 figure(101);
-                bar(mean(h(1:end-1,:),2)); 
-                
-%                 plotKL(ii,d,101)
+                bar(mean(h(1:end-1,:),2));                 
             end
         end
         
@@ -69,10 +64,6 @@ for ii=1:peval.maxiter
 end
 
 peval.numiter = ii;
-
-if ii==peval.maxiter
-    fprintf('\nMaximum number of iterations (%g) reached!\n', ii)
-end
 
 end % of main function
 
@@ -91,11 +82,4 @@ end
 function [dovec_w, dovec_h]=setDoVec(K,fixBg_w,fixBg_h)
 dovec_w=1:K-fixBg_w;
 dovec_h=1:K-fixBg_h;
-end
-
-function plotKL(d,ii,h)
-figure(h);
-hold on;
-plot(ii,d,'.');
-grid on;
 end

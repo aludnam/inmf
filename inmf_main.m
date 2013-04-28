@@ -1,8 +1,8 @@
-function inmf_main(dataIn,peval,outputDir,verbose)
-% inmf_main(dataIn,peval,savethis,verbose)
+function inmf_main(dataIn,outputDir,peval,verbose)
+% inmf_main(dataIn,outputDir,peval,verbose)
 % NMF evaluation with iterative restarts.
 %
-% dataIn:   Time series of two-diemnsional images (as a MATLAB variable).
+% dataIn:   Time series of two-dimensional images (as a MATLAB variable).
 %
 % peval:    (optional) Parameters of the evaluation:
 %           peval.runs - specifiy the number of runs of inmf
@@ -33,18 +33,14 @@ maxMeanDataIn=max(max(mean(dataIn,3)));
 
 for indexRun=peval.runs
     for patchX=1:nPatchX
-        for patchY=1:nPatchY
-            close all % closes open figures
+        for patchY=1:nPatchY            
             % Compute top-left (NW) and bottom-right (SE) corner:
             [peval.cornerNW, peval.cornerSE]=patchCorner(patchX,patchY,peval.patchSizeX,peval.patchSizeY,peval.patchOverlap,sx,sy);
             
             % Extract patch from the data:
             dpix=dataIn(peval.cornerNW(1):peval.cornerSE(1), peval.cornerNW(2):peval.cornerSE(2),:);
             [peval.nx, peval.ny, peval.nt]=size(dpix);
-            
-            % Estimate bg: not working wery well better to supply some rough
-            % estimate from mean(dataIn,3)
-            
+                                    
             % Ignore the patch if not bright enough:
             mmd=max(max(mean(dpix,3)));
             if mmd/maxMeanDataIn<peval.threshold_patchBrightness;
