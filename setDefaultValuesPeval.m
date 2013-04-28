@@ -3,7 +3,7 @@ function peval=setDefaultValuesPeval(peval)
 %
 % Sets default values of the parameters for inmf evaluation.
 
-if ~isfield(peval, 'nRuns'); peval.nRuns=1; end % Number of runs of the whole inmf algorithm. 
+if ~isfield(peval, 'runs'); peval.nRuns=1; end % Index of a run of the whole inmf algorithm. 
 if ~isfield(peval, 'patchSizeX'); peval.patchSizeX = 25; end
 if ~isfield(peval, 'patchSizeY'); peval.patchSizeY = 25; end
 if ~isfield(peval, 'patchOverlap'); peval.patchOverlap=5; end

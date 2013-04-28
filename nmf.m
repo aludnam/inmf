@@ -54,7 +54,7 @@ for ii=1:peval.maxiter
             break
         end
         if verbose
-            fprintf('Cycle %g D-divergence %g\n',ii,d)
+            fprintf('Cycle %g KL-divergence %g\n',ii,d)
             if verbose > 1
                 fignum=100;                
                 imageTiles(reshape(w,peval.nx,peval.ny,peval.K),fignum);

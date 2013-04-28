@@ -1,26 +1,26 @@
-function inmf_main(dataIn,peval,savethis,verbose)
+function inmf_main(dataIn,peval,outputDir,verbose)
 % inmf_main(dataIn,peval,savethis,verbose)
 % NMF evaluation with iterative restarts.
 %
 % dataIn:   Time series of two-diemnsional images (as a MATLAB variable).
 %
 % peval:    (optional) Parameters of the evaluation:
-%           peval.nRuns - specifiy the number of runs of inmf
+%           peval.runs - specifiy the number of runs of inmf
 %           peval.bg - specify the background
 %           peval.patchSizeX - specify the size of the patch
 %           peval.patchSizeY - specify the size of the patch
 %           peval.patchOverlap - specify the overlap of the patches
-%           peval.Kinput - specify number of sources. if specified this way it will be the same for all patches! 
+%           peval.Kinput - specify number of sources. if specified this way it will be the same for all patches!
 %           ....
 %           See "setDefaultValuesPeval.m" for default values.
 %
-% savethis: (optional) Set to 1 to save the results.
+% outputDir: (optional) Directory to save the results.
 %
 % verbose:  (optional) Set to 1 to print information during evaluation. Set
 %           to 2 to show results during evaluation.
 
 if ~exist('peval','var'); peval=[]; end
-if ~exist('savethis','var'); savethis=0; end
+if ~exist('outputDir','var'); outputDir='./'; end
 if ~exist('verbose','var'); verbose=1; end
 
 [sx,sy,st]=size(dataIn);
@@ -31,7 +31,7 @@ peval=setDefaultValuesPeval(peval);
 
 maxMeanDataIn=max(max(mean(dataIn,3)));
 
-for indexRun=peval.nRuns
+for indexRun=peval.runs
     for patchX=1:nPatchX
         for patchY=1:nPatchY
             close all % closes open figures
@@ -60,7 +60,7 @@ for indexRun=peval.nRuns
             else
                 peval.K=estimateK(d,peval.threshold_pca); % Estimation of the number of sources.
             end
-                       
+            
             peval.computed=datestr(now);
             
             if verbose
@@ -74,11 +74,8 @@ for indexRun=peval.nRuns
             peval.elapsedTimeSec=toc;
             
             % Saving data:
-            if savethis
-                peval.path_results = [cd '/P' num2str(patchX) num2str(patchY) '/results_run' num2str(indexRun)];
-                mkdir(peval.path_results)                             
-                savedata(peval.path_results,w,h,peval)
-            end
+            peval.path_results = [outputDir '/P' num2str(patchX) num2str(patchY) '/results_run' num2str(indexRun)];            
+            savedata(peval.path_results,w,h,peval)
         end
     end
 end
