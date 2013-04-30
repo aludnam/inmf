@@ -4,20 +4,29 @@ function inmf_main(dataIn,outputDir,peval,verbose)
 %
 % dataIn:   Time series of two-dimensional images (as a MATLAB variable).
 %
+% outputDir: (optional) Directory to save the results (default "./").
+%
 % peval:    (optional) Parameters of the evaluation:
 %           peval.runs - specifiy the number of runs of inmf
 %           peval.bg - specify the background
 %           peval.patchSizeX - specify the size of the patch
 %           peval.patchSizeY - specify the size of the patch
 %           peval.patchOverlap - specify the overlap of the patches
-%           peval.Kinput - specify number of sources. if specified this way it will be the same for all patches!
+%           peval.threshold_pca - threshold for the estimation of number of components from PCA.
+%           peval.Kinput - specify number of sources. If specified this way it will be the same for all patches!
 %           ....
 %           See "setDefaultValuesPeval.m" for default values.
 %
-% outputDir: (optional) Directory to save the results.
-%
 % verbose:  (optional) Set to 1 to print information during evaluation. Set
-%           to 2 to show results during evaluation.
+%           to 2 to show the estimated w_k during evaluation (default verbose=1).
+%
+% Example:
+% peval.bg = 100; % specify background estimate
+% outputDir = 'results'
+% inmf_main(dataIn,outputDir,peval) 
+%
+% Runs iNMF algorithm on dataIn (3D matrix - video of the data) with specified background 100 photons/frame/pixel. Results
+% will be stored in directory outputDir
 
 if ~exist('peval','var'); peval=[]; end
 if ~exist('outputDir','var'); outputDir='./'; end
@@ -64,6 +73,7 @@ for indexRun=peval.runs
             end
             
             tic
+            
             % iNMF algorithm:
             [w,h,peval]=inmf(d,peval.K,peval,verbose);
             
@@ -80,11 +90,8 @@ end
 function printmsg(patchX,patchY,peval)
 
 fprintf('Patch [%g %g]:\n',patchX, patchY);
-fprintf('Top-left cornere of the patch [%g %g]\n',peval.cornerNW);
-fprintf('Bottom-right cornere of the patch [%g %g]\n',peval.cornerSE);
+fprintf('Top-left corner of the patch [%g %g]\n',peval.cornerNW);
+fprintf('Bottom-right corner of the patch [%g %g]\n',peval.cornerSE);
 fprintf('Patch size is [%g %g] pixels.\n',peval.nx, peval.ny);
 fprintf('Number of sources: %g\n',peval.K);
-if isfield(peval,'path_results')
-    fprintf('Results saved in : %s\n',peval.path_results);
-end
 end

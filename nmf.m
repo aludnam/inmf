@@ -1,6 +1,7 @@
 function [w,h,peval]=nmf(v,w,h,peval,verbose)
 % [w,h,peval]=nmf(v,w,h,peval,verbose)
 % Non-negative matrix factorisation updates minimising KL divergence KL(V|WH)
+% 
 % References : D.D. Lee and H.S. Seung. Algorithms for non-negative matrix
 % factorization. Advances in neural information processing systems, 13, 2001.
 %
@@ -55,8 +56,8 @@ for ii=1:peval.maxiter
             if verbose > 1
                 fignum=100;                
                 imageTiles(reshape(w,peval.nx,peval.ny,peval.K),fignum);
-                figure(101);
-                bar(mean(h(1:end-1,:),2));                 
+                % figure(101);
+                % bar(mean(h(1:end-1,:),2));                 
             end
         end
         
@@ -73,7 +74,6 @@ end % of main function
 % Nested functions:
 
 function checkin(v,w,h) % Test for negative values in v, w and h.
-
 if any([min(v(:))<0, min(w(:))<0, min(h(:)) < 0])
     error('Data entries can not be negative!');
 end

@@ -2,10 +2,13 @@ function savedata(path,w,h,peval)
 % savedata(path,w,h,peval)
 % Saves iNMF results into a direcotry defined by 'path'.
 
-if ~exist('path','var'); path=cd; end % Default direcotry.
+if ~exist('path','var')
+    path=cd; % Default direcotry.
+    peval.path_results = path;
+end 
 
+fprintf('Results saved in : %s\n',path);
 mkdir(path)
-peval.path_results = path;
 
 save([peval.path_results '/w'],'w');
 save([peval.path_results '/h'],'h');

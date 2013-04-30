@@ -14,17 +14,17 @@ for restart=1:K
     [winit,hinit]=initwh(N,T,K,meanv,peval.bg);    
     
     if restart>1        
-        [sx, isx] = sort(sum(w.^2,1), 'descend'); % L2 norm sorting of w.
-        
+        [sx, isx] = sort(sum(w.^2,1), 'descend'); % L2 norm sorting of w.        
         winit(:,1:restart-1)=w(:,isx(1:restart-1));
         hinit(1:restart-1,:)=h(isx(1:restart-1),:);        
     end
     
     printmsg(restart,K)
     
+    % NMF algorithm:
     [w,h,peval]=nmf(d,winit,hinit,peval,verbose);
     
-    peval.ddiv(restart) = ddivergence(d, w*h); % final values of the d-divergence   
+    peval.ddiv(restart) = ddivergence(d, w*h); % Final values of the d-divergence.
 end
 
 end % of main function
