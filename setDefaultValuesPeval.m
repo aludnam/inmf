@@ -13,6 +13,6 @@ if ~isfield(peval, 'dterm'); peval.dterm = 1; end % Termination criterion.
 if ~isfield(peval, 'maxiter'); peval.maxiter = 1000; end % Maximum number of iterations. 
 if ~isfield(peval, 'fixBg_w'); peval.fixBg_w=1; end % Last (background) component w not updated.
 if ~isfield(peval, 'fixBg_h'); peval.fixBg_h=0; end % Last (background) component h not updated.
-if ~isfield(peval, 'checkTermCycle'); peval.checkTermCycle=50; end % How often to check the termination criterion and print value of KL divergence (verbose >0).
+if ~isfield(peval, 'checkTermCycle'); peval.checkTermCycle=100; end % How often to check the termination criterion and print the value of KL divergence (if verbose>0).
 
 end

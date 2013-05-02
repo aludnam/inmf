@@ -1,4 +1,17 @@
 function [w,h,peval]=inmf(d,K,peval,verbose)
+% [w,h,peval]=inmf(d,K,peval,verbose)
+% Non-negative matrix factorisation with iterative restarts. This function
+% is called by inmf_main.m.
+%
+% INPUT
+% d:        Data in (2D matrix NXT, N is number of pixels, T is number of time frames).
+% K:        Number of components (rank of factorisation).
+% peval:    Parameters of the evaluation (see setDefaultValuesPeval.m for default values).
+%
+% OUTPUT
+% w:        Spatial components. 
+% h:        Temporal components.
+% peval:    Parameters of the evaluation.
 
 if ~exist('peval','var'); peval=[];end
 if ~exist('verbose','var'); verbose=1;end
