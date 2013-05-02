@@ -1,6 +1,7 @@
 function [cornerTL,cornerBR]=patchCorner(patchX,patchY,patchSizeX,patchSizeY,patchOverlap,sx,sy)
-% [cornerTL,cornerBR]=patchCorner(patchX,patchY,patchSizeX,patchSizeY,patchOverlap,sx,xy)
 % Computes top-left (TL) and bottom-right (BR) coordinates of the patch. 
+%
+% [cornerTL,cornerBR]=patchCorner(patchX,patchY,patchSizeX,patchSizeY,patchOverlap,sx,xy)
 
 nPatchVec=[patchX,patchY];
 patchSizeVec=[patchSizeX,patchSizeY];

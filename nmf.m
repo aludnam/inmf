@@ -1,6 +1,7 @@
 function [w,h,peval]=nmf(v,w,h,peval,verbose)
+% Non-negative matrix factorisation updates minimising KL divergence KL(V|WH).
+%
 % [w,h,peval]=nmf(v,w,h,peval,verbose)
-% Non-negative matrix factorisation updates minimising KL divergence KL(V|WH)
 % 
 % References : D.D. Lee and H.S. Seung. Algorithms for non-negative matrix
 % factorization. Advances in neural information processing systems, 13, 2001.

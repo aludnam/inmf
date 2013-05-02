@@ -1,7 +1,7 @@
 function N=normL(M,dim,Lnorm)
+% Normalizes marix M along dimension dim according to the L-norm norm such that sum(M.^Lnorm,dim)=1. 
+%
 % N=normL(M,dim,Lnorm)
-% Normalizes marix M along dimension dim according to the Lnorm norm such
-% that sum(M.^Lnorm,dim)=1. 
 %
 % M -       input matrix.
 % dim -     dimension along which the matrix should be normalized.

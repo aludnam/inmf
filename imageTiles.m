@@ -1,7 +1,8 @@
 function imageTiles(im,h,a,b)
+% Tiles the frames of the 3D image.
+%
 % imageTiles(im,h,a,b)
 % 
-% Tiles the frames of the 3D image 
 % im - input image (3D) 
 % h - (optional) handle of a new figure 
 % a - (optional) number of frames along vertical direction

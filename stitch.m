@@ -1,7 +1,7 @@
 function resIm=stitch(resDir,rf,pow)
+% Makes high-resolution image from iNMF estimated sources. Stitches results from different patches. 
+%
 % resIm=stitch(resDir,rf,pow)
-% Makes high-resolution image from iNMF estimated soureces. Stitches results from iNMF 
-% evaluation of different patches. 
 %
 % resIm - Visualisation of the iNMF results.
 % resDir - Directory with stored results (default resDir='./').

@@ -1,6 +1,7 @@
 function [out,nxi,nyi]=makeHiRes(w,h,nx,ny,rf,pow)
-% [out,nxi,nyi]=makeHiRes(w,h,nx,ny,rf,pow)
 % Makes high resolution image from the results of iNMF algorithm. 
+%
+% [out,nxi,nyi]=makeHiRes(w,h,nx,ny,rf,pow)
 % 
 % out:  result 
 % nxi:  x-dimension of the result
@@ -22,11 +23,10 @@ function [wi,nxi,nyi]=interpW(w,nx,ny,intFac)
 
 K=size(w,2); 
 wr=reshape(w,nx,ny,K); 
-
-[xCoarse, yCoarse] = meshgrid(0:ny-1,0:nx-1);
 nxi=intFac*nx; 
 nyi=intFac*ny; 
-%[xFine, yFine] = meshgrid(linspace(0,nx-1,nxi),linspace(0,ny-1,nyi));
+
+[xCoarse, yCoarse] = meshgrid(0:ny-1,0:nx-1);
 [xFine, yFine] = meshgrid(linspace(0,ny-1,nyi),linspace(0,nx-1,nxi));
 wri=zeros(nxi,nyi,K); 
 for k=1:K

@@ -1,6 +1,7 @@
 function savedata(path,w,h,peval)
-% savedata(path,w,h,peval)
 % Saves iNMF results into a direcotry defined by 'path'.
+%
+% savedata(path,w,h,peval)
 
 if ~exist('path','var')
     path=cd; % Default direcotry.

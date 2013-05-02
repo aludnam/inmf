@@ -1,6 +1,7 @@
 function inmf_main(dataIn,outputDir,peval,verbose)
-% inmf_main(dataIn,outputDir,peval,verbose)
 % NMF evaluation with iterative restarts.
+%
+% inmf_main(dataIn,outputDir,peval,verbose)
 %
 % dataIn:   Time series of two-dimensional images (as a MATLAB variable).
 %
