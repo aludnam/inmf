@@ -14,7 +14,7 @@ function inmf_main(dataIn,outputDir,peval,verbose)
 %           peval.patchSizeY - specify the size of the patch
 %           peval.patchOverlap - specify the overlap of the patches
 %           peval.threshold_pca - threshold for the estimation of number of components from PCA.
-%           peval.Kinput - specify number of sources. If specified this way it will be the same for all patches!
+%           peval.Kinput - directly specify number of sources (ignoring peval.threshold_pca)
 %           ....
 %           See "setDefaultValuesPeval.m" for default values.
 %

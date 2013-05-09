@@ -57,6 +57,8 @@ for ii=1:peval.maxiter
             if verbose > 1
                 fignum=100;                
                 imageTiles(reshape(w,peval.nx,peval.ny,peval.K),fignum);
+                figTitle=sprintf('Showing K=%g sources on cycle %g.', peval.K, ii);
+                set(fignum,'name',figTitle,'numbertitle','off')
                 % figure(101);
                 % bar(mean(h(1:end-1,:),2));                 
             end
