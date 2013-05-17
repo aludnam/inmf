@@ -1,49 +1,68 @@
 Non-negative matrix factorisation algorithm with iterative restarts (iNMF). 
-Tested in MATLAB2008b. 
+Code by Ondrej Mandula, May 2013.  Tested in MATLAB2008b. 
 
-CONTENT:
+To accompany the paper
 
-ddivergence.m
-estimateK.m
-imageTiles.m
-inmf.m
-inmf_main.m
-makeHiRes.m
-nmf.m
-normL.m
-npatch.m
-patchCorner.m
-setDefaultValuesPeval.m
-showPatches.m
-stitch.m
+"Localisation microscopy with quantum dots using non-negative matrix
+factorisation" by Ondrej Mandula, Ivana Sumanovac, Rainer Heintzmann,
+Christopher K. I. Williams (2013).
 
-Type 'help inmf" for more information. 
 
 USAGE:
 
-To run inmf with default settings (saved in setDefaultValuesPeval.m): 
+To run inmf with default settings (saved in setDefaultValuesPeval.m) do: 
 
 inmf_main(<input data>,<output directory>)
 
-<input data> is a 3D matrix (nx X ny X T, nx,ny - number of pixels in x,y direction, T - number of time frames).
+<input data> is a 3D matrix (nx X ny X T, nx,ny - number of pixels in x,y 
+direction, T - number of time frames).
 
-Output will be saved in <output direcotry> directory. 
+Output will be saved in <output directory> directory. 
 
-Type "help inmf_main" for more information. 
+Type "help inmf_main" for more information. See also Contents.m file.
 
 EXAMPLES:
 
-General example of the iNMF evaluation. 
-Examples/example.m 
+These are found in the Examples directory.
 
-To reproduce the figures in the paper:
+Example 1)
 
-Fig.4 - simulated data:
-Examples/example_fig4_sim.m
+Run the code example.m. The data is simulated from 8 sources; the true 
+sources are shown in Figure 13. peval.Kinput=12 sources are specified in 
+the code.
 
-Fig.4 - experimental data:
-Examples/example_fig4_exp.m
+Observe the estimated sources updating over time. Note that after 
+iteration j, sources (j+1) to K are re-initialized to noise.
 
-Fig.7 - experimental data:
-Examples/example_fig7.m
+Example 2) 
 
+Run example_fig4_sim.m. This is simulated data in a # shape, as shown in 
+Fig 4 (top row) in the paper.  
+The number of sources is estimated to be 30, based on PCA. 10 runs are 
+carried out, and the results across runs are combined.
+
+Example 3) 
+
+Run example_fig4_exp.m. This is real data of a 18 X 18 pixel region of 
+QD-labelled tubulin, as shown in Fig 4 (bottom row) in the paper.  
+The number of sources is estimated to be 34, based on PCA. 10 runs are 
+carried out, and the results across runs are combined.
+
+Example 4) 
+
+Run example_fig7.m. This is real data of out-of-focus QDs as shown in 
+Fig. 7 of the paper. 
+The number of sources is estimated to be 22, based on PCA.
+
+LICENCE:
+
+Permission is granted for anyone to copy, use, or modify these
+programs for purposes of research or education, provided this
+copyright notice is retained, and note is made of any changes that
+have been made.
+
+These programs are distributed without any warranty, express or
+implied. As these programs were written for research purposes only,
+they have not been tested to the degree that would be advisable in any
+important application.  All use of these programs is entirely at the
+user's own risk.
