@@ -28,30 +28,30 @@ These are found in the Examples directory.
 Example 1)
 
 Run the code example.m. The data is simulated from 8 sources; the true 
-sources are shown in Figure 13. peval.Kinput=12 sources are specified in 
-the code.
+sources are shown in Supplementary Figure S6. peval.Kinput=15 sources are 
+specified in the code.
 
 Observe the estimated sources updating over time. Note that after 
 iteration j, sources (j+1) to K are re-initialized to noise.
 
 Example 2) 
 
-Run example_fig4_sim.m. This is simulated data in a # shape, as shown in 
-Fig 4 (top row) in the paper.  
+Run example_fig3_sim.m. This is simulated data in a # shape, as shown in 
+Fig. 3 (top row) in the paper.  
 The number of sources is estimated to be 30, based on PCA. 10 runs are 
 carried out, and the results across runs are combined.
 
 Example 3) 
 
-Run example_fig4_exp.m. This is real data of a 18 X 18 pixel region of 
-QD-labelled tubulin, as shown in Fig 4 (bottom row) in the paper.  
+Run example_fig3_exp.m. This is real data of a 18 X 18 pixel region of 
+QD-labelled tubulin, as shown in Fig. 3 (bottom row) in the paper.  
 The number of sources is estimated to be 34, based on PCA. 10 runs are 
 carried out, and the results across runs are combined.
 
 Example 4) 
 
-Run example_fig7.m. This is real data of out-of-focus QDs as shown in 
-Fig. 7 of the paper. 
+Run example_fig5.m. This is real data of out-of-focus QDs as shown in 
+Fig. 5 of the paper. 
 The number of sources is estimated to be 22, based on PCA.
 
 LICENCE:
