@@ -102,18 +102,18 @@ fprintf('Patch size is [%g %g] pixels.\n',peval.nx, peval.ny);
 fprintf('Number of sources: %g\n',peval.K);
 end
 
-function savedata(path,w,h,peval)
-% Saves iNMF results into a direcotry defined by 'path'.
+function savedata(pathRes,w,h,peval)
+% Saves iNMF results into a direcotry defined by 'pathRes'.
 %
-% savedata(path,w,h,peval)
+% savedata(pathRes,w,h,peval)
 
-if ~exist('path','var')
-    path=cd; % Default direcotry.
-    peval.path_results = path;
+if ~exist('pathRes','var')
+    pathRes=cd; % Default direcotry.
+    peval.path_results = pathRes;
 end 
 
-fprintf('Results saved in : %s\n',path);
-mkdir(path)
+fprintf('%s Results saved in : %s\n',datestr(now),pathRes);
+mkdir(peval.path_results)
 
 save([peval.path_results '/w'],'w');
 save([peval.path_results '/h'],'h');
