@@ -20,7 +20,7 @@ end
 cmap='gray';
 
 [nPatchX,nPatchY]=npatch(sx,sy,patchSizeX,patchSizeY,patchOverlap);
-
+figure()
 imagesc(mean(im,3)),
 set (gca, 'DataAspectRatio',[1 1 1],'xtick',[],'ytick',[]);
 colormap(cmap);
