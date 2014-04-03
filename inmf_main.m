@@ -66,7 +66,7 @@ for indexRun=peval.runs
             else
                 peval.K=estimateK(d,peval.threshold_pca); % Estimation of the number of sources.
                 if isfield(peval, 'Kmax')
-                    peval.K=max(peval.K,peval.Kmax);
+                    peval.K=min(peval.K,peval.Kmax);
                 end
             end
             
