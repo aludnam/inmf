@@ -13,7 +13,7 @@ if ~exist('rf','var'); rf=4; end
 if ~exist('pow','var'); pow=10; end
 
 fprintf('Resampling the results %g times.\n',rf)
-fprintf('Taking the estimated sources to the power of  %g.\n',pow)
+fprintf('Taking the estimated sources to the power of %g.\n',pow)
 
 d=dir([resDir '/P*']);
 [NW,SE]=resSize(resDir,d);
@@ -21,7 +21,7 @@ sizeRes=rf*(SE-NW+1); % Size of the result.
 resIm=zeros(sizeRes);
 
 for ii=1:length(d)
-    fprintf('Processing patch %s\n', [resDir '/' d(ii).name])
+    fprintf('Processing patch %s', [resDir '/' d(ii).name])
     sd = dir([resDir '/' d(ii).name '/results_run*']);
     n=0;
     out=[];
@@ -31,6 +31,7 @@ for ii=1:length(d)
             load ([resDir '/' d(ii).name '/' sd(jj).name '/h'])
             load ([resDir '/' d(ii).name '/' sd(jj).name '/peval'])
             [outtmp,nxi,nyi]=makeHiRes(w,h,peval.nx,peval.ny,rf,pow);
+            fprintf '.'
             wxy=makeWindow(size(outtmp),rf*peval.patchOverlap);
             if n==0
                 out=zeros(nxi,nyi);
@@ -46,6 +47,7 @@ for ii=1:length(d)
     c1=cTL(1):cTL(1)+size(out,1)-1;
     c2=cTL(2):cTL(2)+size(out,2)-1;
     resIm(c1,c2)=resIm(c1,c2)+out;    
+    fprintf('\n')
 end
 end
 
@@ -54,7 +56,9 @@ function [cNW,cSE]=resSize(resDir, d)
 cNW=[inf,inf];
 cSE=[1,1];
 for ii=1:length(d)
-    load ([resDir '/' d(ii).name '/results_run1/peval'])
+    resDirs=dir([resDir '/' d(ii).name]);
+    resDirLast=resDirs(end).name;
+    load ([resDir '/' d(ii).name '/' resDirLast '/peval'])
     cNW=min(cNW,peval.cornerNW);
     cSE=max(cSE,peval.cornerSE);
 end

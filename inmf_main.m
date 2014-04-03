@@ -94,7 +94,7 @@ end % of main function
 % Nested functions:
 
 function printmsg(patchX,patchY,peval)
-
+fprintf('%s\n',datestr(now));
 fprintf('Patch [%g %g]:\n',patchX, patchY);
 fprintf('Top-left corner of the patch [%g %g]\n',peval.cornerNW);
 fprintf('Bottom-right corner of the patch [%g %g]\n',peval.cornerSE);
@@ -112,7 +112,7 @@ if ~exist('pathRes','var')
     peval.path_results = pathRes;
 end 
 
-fprintf('%s Results saved in : %s\n',datestr(now),pathRes);
+fprintf('Results saved in : %s\n',pathRes);
 mkdir(peval.path_results)
 
 save([peval.path_results '/w'],'w');

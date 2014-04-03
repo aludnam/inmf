@@ -1,4 +1,4 @@
-function K=estimateK(v,threshold_pca)
+function [K,pcn]=estimateK(v,threshold_pca)
 % Estimates number of compontents from the magnitude of the principal components. 
 %
 % K=estimateK(v, threshold_pca)

@@ -39,12 +39,14 @@ for patchX=1:nPatchX
             mmd=max(max(mean(dpix,3)));
             if mmd/maxMeanDataIn<threshold_patchBrightness;
                 lineW=1;
-            else                
-                [nx,ny,nt]=size(dpix);
-                d=reshape(dpix,nx*ny,nt);
-                K=estimateK(d,threshold_pca);
-                textToShow=['K=' num2str(K)];
-                text (0.5*(cornerBR(2)+cornerTL(2))-3, cornerTL(1)+0.5*(cornerBR(1)-cornerTL(1))+2,textToShow,'color',1-[eps eps eps])
+            else
+                if ~isempty(threshold_pca)
+                    [nx,ny,nt]=size(dpix);
+                    d=reshape(dpix,nx*ny,nt);
+                    K=estimateK(d,threshold_pca);
+                    textToShow=['K=' num2str(K)];
+                    text (0.5*(cornerBR(2)+cornerTL(2))-3, cornerTL(1)+0.5*(cornerBR(1)-cornerTL(1))+2,textToShow,'color',1-[eps eps eps])
+                end
             end
         end
         addColorBox(cornerTL,cornerBR, col,lineW,1);
