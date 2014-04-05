@@ -14,7 +14,7 @@ function inmf_main(dataIn,outputDir,peval,verbose)
 %           peval.patchSizeY - specify the size of the patch
 %           peval.patchOverlap - specify the overlap of the patches
 %           peval.threshold_pca - threshold for the estimation of number of components from PCA.
-%           peval.Kinput - directly specify number of sources (ignoring peval.threshold_pca)
+%           peval.Kinput - directly specify number of sources (ignoring peval.threshold_pca)           
 %           ....
 %           See "setDefaultValuesPeval.m" for default values.
 %
@@ -36,14 +36,23 @@ if ~exist('verbose','var'); verbose=1; end
 [sx,sy,st]=size(dataIn);
 peval=setDefaultValuesPeval(peval);
 
-% compute number of patches:
-[nPatchX,nPatchY]=npatch(sx,sy,peval.patchSizeX,peval.patchSizeY,peval.patchOverlap);
+if isfield(peval, 'patch_range')
+    % compute only specific patches:
+    patchX_range = peval.patch_range(:,1);
+    patchY_range = peval.patch_range(:,2);
+else
+    % compute number of patches:
+    [nPatchX,nPatchY]=npatch(sx,sy,peval.patchSizeX,peval.patchSizeY,peval.patchOverlap);
+    patchX_range = 1:nPatchX;
+    patchY_range = 1:nPatchY;
+end
 
 maxMeanDataIn=max(max(mean(dataIn,3)));
 
+
 for indexRun=peval.runs
-    for patchX=1:nPatchX
-        for patchY=1:nPatchY            
+    for patchX=patchX_range
+        for patchY=patchY_range
             % Compute top-left (NW) and bottom-right (SE) corner:
             [peval.cornerNW, peval.cornerSE]=patchCorner(patchX,patchY,peval.patchSizeX,peval.patchSizeY,peval.patchOverlap,sx,sy);
             
