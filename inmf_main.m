@@ -36,66 +36,63 @@ if ~exist('verbose','var'); verbose=1; end
 [sx,sy,st]=size(dataIn);
 peval=setDefaultValuesPeval(peval);
 
-if isfield(peval, 'patch_range')
-    % compute only specific patches:
-    patchX_range = peval.patch_range(:,1);
-    patchY_range = peval.patch_range(:,2);
-else
+if ~isfield(peval, 'patch_range')
     % compute number of patches:
     [nPatchX,nPatchY]=npatch(sx,sy,peval.patchSizeX,peval.patchSizeY,peval.patchOverlap);
-    patchX_range = 1:nPatchX;
-    patchY_range = 1:nPatchY;
+    [X,Y] = meshgrid(1:nPatchX,1:nPatchY);    
+    peval.patch_range = [X(:),Y(:)];
+    peval.patch
 end
 
 maxMeanDataIn=max(max(mean(dataIn,3)));
 
 
 for indexRun=peval.runs
-    for patchX=patchX_range
-        for patchY=patchY_range
-            % Compute top-left (NW) and bottom-right (SE) corner:
-            [peval.cornerNW, peval.cornerSE]=patchCorner(patchX,patchY,peval.patchSizeX,peval.patchSizeY,peval.patchOverlap,sx,sy);
-            
-            % Extract patch from the data:
-            dpix=dataIn(peval.cornerNW(1):peval.cornerSE(1), peval.cornerNW(2):peval.cornerSE(2),:);
-            [peval.nx, peval.ny, peval.nt]=size(dpix);
-                                    
-            % Ignore the patch if not bright enough:
-            mmd=max(max(mean(dpix,3)));
-            if mmd/maxMeanDataIn<peval.threshold_patchBrightness;
-                continue
-            end
-            
-            % Reshape data into 2D data matrix by concatenating rows of pixels in each frame:
-            d=reshape(dpix,peval.nx*peval.ny,peval.nt);
-            
-            % Number of sources:
-            if isfield(peval, 'Kinput')
-                peval.K=peval.Kinput; % Number of sources is given by user.
-            else
-                peval.K=estimateK(d,peval.threshold_pca); % Estimation of the number of sources.
-                if isfield(peval, 'Kmax')
-                    peval.K=min(peval.K,peval.Kmax);
-                end
-            end
-            
-            peval.computed=datestr(now);
-            
-            if verbose
-                printmsg(patchX,patchY,peval);
-            end
-            
-            tic
-            
-            % iNMF algorithm:
-            [w,h,peval]=inmf(d,peval.K,peval,verbose);
-            
-            peval.elapsedTimeSec=toc;
-            
-            % Saving data:
-            peval.path_results = [outputDir '/P' num2str(patchX) num2str(patchY) '/results_run' num2str(indexRun)];            
-            savedata(peval.path_results,w,h,peval)
+    for n = 1:size(peval.patch_range,1)
+        patchX = peval.patch_range(n,1);
+        patchY = peval.patch_range(n,2);
+        % Compute top-left (NW) and bottom-right (SE) corner:
+        [peval.cornerNW, peval.cornerSE]=patchCorner(patchX,patchY,peval.patchSizeX,peval.patchSizeY,peval.patchOverlap,sx,sy);
+
+        % Extract patch from the data:
+        dpix=dataIn(peval.cornerNW(1):peval.cornerSE(1), peval.cornerNW(2):peval.cornerSE(2),:);
+        [peval.nx, peval.ny, peval.nt]=size(dpix);
+
+        % Ignore the patch if not bright enough:
+        mmd=max(max(mean(dpix,3)));
+        if mmd/maxMeanDataIn<peval.threshold_patchBrightness;
+            continue
         end
+
+        % Reshape data into 2D data matrix by concatenating rows of pixels in each frame:
+        d=reshape(dpix,peval.nx*peval.ny,peval.nt);
+
+        % Number of sources:
+        if isfield(peval, 'Kinput')
+            peval.K=peval.Kinput; % Number of sources is given by user.
+        else
+            peval.K=estimateK(d,peval.threshold_pca); % Estimation of the number of sources.
+            if isfield(peval, 'Kmax')
+                peval.K=min(peval.K,peval.Kmax);
+            end
+        end
+
+        peval.computed=datestr(now);
+
+        if verbose
+            printmsg(patchX,patchY,peval);
+        end
+
+        tic
+
+        % iNMF algorithm:
+        [w,h,peval]=inmf(d,peval.K,peval,verbose);
+
+        peval.elapsedTimeSec=toc;
+
+        % Saving data:
+        peval.path_results = [outputDir '/P' num2str(patchX) num2str(patchY) '/results_run' num2str(indexRun)];            
+        savedata(peval.path_results,w,h,peval)
     end
 end
 end % of main function
