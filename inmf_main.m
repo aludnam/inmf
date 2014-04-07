@@ -41,7 +41,6 @@ if ~isfield(peval, 'patch_range')
     [nPatchX,nPatchY]=npatch(sx,sy,peval.patchSizeX,peval.patchSizeY,peval.patchOverlap);
     [X,Y] = meshgrid(1:nPatchX,1:nPatchY);    
     peval.patch_range = [X(:),Y(:)];
-    peval.patch
 end
 
 maxMeanDataIn=max(max(mean(dataIn,3)));
@@ -68,9 +67,7 @@ for indexRun=peval.runs
         d=reshape(dpix,peval.nx*peval.ny,peval.nt);
 
         % Number of sources:
-        if isfield(peval, 'Kinput')
-            peval.K=peval.Kinput; % Number of sources is given by user.
-        else
+        if ~isfield(peval, 'K')
             peval.K=estimateK(d,peval.threshold_pca); % Estimation of the number of sources.
             if isfield(peval, 'Kmax')
                 peval.K=min(peval.K,peval.Kmax);
