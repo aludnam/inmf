@@ -88,6 +88,7 @@ for indexRun=peval.runs
         peval.elapsedTimeSec=toc;
 
         % Saving data:
+        %peval.path_results = [outputDir '/P-' num2str(patchX) '-' num2str(patchY) '/results_run' num2str(indexRun)];            
         peval.path_results = [outputDir '/P' num2str(patchX) num2str(patchY) '/results_run' num2str(indexRun)];            
         savedata(peval.path_results,w,h,peval)
     end

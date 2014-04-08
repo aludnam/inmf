@@ -8,10 +8,14 @@ function imageTiles(im,h,a,b)
 % a - (optional) number of frames along vertical direction
 % b - (optional) number of frames along horizontal direction
 
-if exist('h','var')
-    figure(h); 
-else 
+if ~exist('h','var')
+    h = [];
+end
+
+if isempty(h)
     figure; 
+else 
+    figure(h);
 end
 
 cmap = 'gray';
