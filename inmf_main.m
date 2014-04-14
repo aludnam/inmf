@@ -14,7 +14,9 @@ function inmf_main(dataIn,outputDir,peval,verbose)
 %           peval.patchSizeY - specify the size of the patch
 %           peval.patchOverlap - specify the overlap of the patches
 %           peval.threshold_pca - threshold for the estimation of number of components from PCA.
-%           peval.Kinput - directly specify number of sources (ignoring peval.threshold_pca)           
+%           peval.Kinput - directly specify number of sources (ignoring peval.threshold_pca)
+%           peval.Kmax - upper bound on K found from the PCA
+%    
 %           ....
 %           See "setDefaultValuesPeval.m" for default values.
 %
@@ -67,7 +69,7 @@ for indexRun=peval.runs
         d=reshape(dpix,peval.nx*peval.ny,peval.nt);
 
         % Number of sources:
-        if ~isfield(peval, 'K')
+        if ~isfield(peval, 'Kinput')
             peval.K=estimateK(d,peval.threshold_pca); % Estimation of the number of sources.
             if isfield(peval, 'Kmax')
                 peval.K=min(peval.K,peval.Kmax);
@@ -77,7 +79,7 @@ for indexRun=peval.runs
         peval.computed=datestr(now);
 
         if verbose
-            printmsg(patchX,patchY,peval);
+            printmsg(patchX,patchY,peval,indexRun);
         end
 
         tic
@@ -88,8 +90,8 @@ for indexRun=peval.runs
         peval.elapsedTimeSec=toc;
 
         % Saving data:
-        %peval.path_results = [outputDir '/P-' num2str(patchX) '-' num2str(patchY) '/results_run' num2str(indexRun)];            
-        peval.path_results = [outputDir '/P' num2str(patchX) num2str(patchY) '/results_run' num2str(indexRun)];            
+        peval.path_results = [outputDir '/P-' num2str(patchX) '-' num2str(patchY) '/results_run' num2str(indexRun)];            
+        %peval.path_results = [outputDir '/P' num2str(patchX) num2str(patchY) '/results_run' num2str(indexRun)];            
         savedata(peval.path_results,w,h,peval)
     end
 end
@@ -100,13 +102,14 @@ end % of main function
 
 % Nested functions:
 
-function printmsg(patchX,patchY,peval)
+function printmsg(patchX,patchY,peval,indexRun)
 fprintf('%s\n',datestr(now));
 fprintf('Patch [%g %g]:\n',patchX, patchY);
 fprintf('Top-left corner of the patch [%g %g]\n',peval.cornerNW);
 fprintf('Bottom-right corner of the patch [%g %g]\n',peval.cornerSE);
 fprintf('Patch size is [%g %g] pixels.\n',peval.nx, peval.ny);
 fprintf('Number of sources: %g\n',peval.K);
+fprintf('Evaluation: %g\n',indexRun)
 end
 
 function savedata(pathRes,w,h,peval)
