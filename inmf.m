@@ -21,8 +21,7 @@ if ~isfield(peval,'bg'); peval.bg = min(mean(d,2));end % If the background is no
 [N,T]=size(d);
 meanv=mean(d(:));
 
-for restart=1:K
-    
+for restart=1:K    
     % Random initialisation + last component as a flat background:
     [winit,hinit]=initwh(N,T,K,meanv,peval.bg);    
     
@@ -53,8 +52,9 @@ function [winit,hinit]=initwh(N,T,K,meanv,bg)
 % meanv - mean of the data -> meanv=mean(v(:))
 % bg - background value per pixel
 
+reset(RandStream.getDefaultStream,sum(100*clock)) % reseting random number seed
 winit = normL(max(rand(N,K),eps),1); % sum(winit,1) is 1
-hinit=max((meanv-bg)*rand(K,T),eps); % The multiplication by (meanv-bg) is there for getting it into reasonable range.
+hinit = max((meanv-bg)*rand(K,T),eps); % The multiplication by (meanv-bg) is there for getting it into reasonable range.
 winit(:,K)=1/N*ones(N,1); % flat background component
 hinit(K,:)=bg*N*ones(1,T); % intensity of the background
 end
