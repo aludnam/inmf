@@ -1,7 +1,10 @@
-function [cornerTL,cornerBR]=patchCorner(patchX,patchY,patchSizeX,patchSizeY,patchOverlap,sx,sy)
+function [cornerTL,cornerBR]=patchCorner(patchX,patchY,patchSizeX,patchSizeY,patchOverlap,sx,sy,offset)
 % Computes top-left (TL) and bottom-right (BR) coordinates of the patch. 
 %
-% [cornerTL,cornerBR]=patchCorner(patchX,patchY,patchSizeX,patchSizeY,patchOverlap,sx,xy)
+% [cornerTL,cornerBR]=patchCorner(patchX,patchY,patchSizeX,patchSizeY,patchOverlap,sx,xy,offset)
+if ~exist('offset','var')
+    offset = [0,0];
+end
 
 nPatchVec=[patchX,patchY];
 patchSizeVec=[patchSizeX,patchSizeY];
@@ -12,5 +15,5 @@ else
     offsetBox = [0 0];
 end
 
-cornerTL=max((nPatchVec-1).*(patchSizeVec-patchOverlap)+1+offsetBox,[1 1]);% top-left corner
-cornerBR=min(nPatchVec.*patchSizeVec-(nPatchVec-1).*patchOverlap+offsetBox,[sx,sy]); % bottom-right corner
+cornerTL=max((nPatchVec-1).*(patchSizeVec-patchOverlap)+1+offsetBox + offset,[1 1]);% top-left corner
+cornerBR=min(nPatchVec.*patchSizeVec-(nPatchVec-1).*patchOverlap+offsetBox + + offset,[sx,sy]); % bottom-right corner

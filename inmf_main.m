@@ -45,6 +45,11 @@ if ~isfield(peval, 'patch_range')
     peval.patch_range = [X(:),Y(:)];
 end
 
+if ~isfield(peval, 'patch_offset')
+    % offset of each patch    
+    peval.patch_offset = [0,0];
+end
+
 maxMeanDataIn=max(max(mean(dataIn,3)));
 
 
@@ -53,7 +58,7 @@ for indexRun=peval.runs
         patchX = peval.patch_range(n,1);
         patchY = peval.patch_range(n,2);
         % Compute top-left (NW) and bottom-right (SE) corner:
-        [peval.cornerNW, peval.cornerSE]=patchCorner(patchX,patchY,peval.patchSizeX,peval.patchSizeY,peval.patchOverlap,sx,sy);
+        [peval.cornerNW, peval.cornerSE]=patchCorner(patchX,patchY,peval.patchSizeX,peval.patchSizeY,peval.patchOverlap,sx,sy,peval.patch_offset);
 
         % Extract patch from the data:
         dpix=dataIn(peval.cornerNW(1):peval.cornerSE(1), peval.cornerNW(2):peval.cornerSE(2),:);
@@ -88,9 +93,11 @@ for indexRun=peval.runs
         [w,h,peval]=inmf(d,peval.K,peval,verbose);
 
         peval.elapsedTimeSec=toc;
-
+                
         % Saving data:
-        peval.path_results = [outputDir '/P-' num2str(patchX) '-' num2str(patchY) '/results_run' num2str(indexRun)];            
+        app = []; 
+        if any(peval.patch_offset ~= 0); app = 'o'; end
+        peval.path_results = [outputDir '/P',app, '-' num2str(patchX) '-' num2str(patchY) '/results_run' num2str(indexRun)];            
         %peval.path_results = [outputDir '/P' num2str(patchX) num2str(patchY) '/results_run' num2str(indexRun)];            
         savedata(peval.path_results,w,h,peval)
     end

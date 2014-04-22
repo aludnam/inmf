@@ -1,4 +1,4 @@
-function showPatches(im,patchSizeX,patchSizeY,patchOverlap,threshold_pca,threshold_patchBrightness)
+function showPatches(im,patchSizeX,patchSizeY,patchOverlap,threshold_pca,threshold_patchBrightness,patch_offset)
 % Shows division of the data into smaller patches. 
 %
 % showPatches(im,patchSizeX,patchSizeY,patchOverlap,threshold_pca,threshold_patchBrightness)
@@ -16,6 +16,9 @@ function showPatches(im,patchSizeX,patchSizeY,patchOverlap,threshold_pca,thresho
 if ~exist('threshold_patchBrightness','var')
     threshold_patchBrightness=0;
 end
+if ~exist('patch_offset','var')
+    patch_offset = [0,0];
+end
 [sx,sy,sz]=size(im);
 cmap='gray';
 
@@ -26,13 +29,13 @@ imagesc(mean(im,3)),
 set (gca, 'DataAspectRatio',[1 1 1],'xtick',[],'ytick',[]);
 colormap(cmap);
 maxMeanDataIn=max(max(mean(im,3)));
-
+nPatch = 0; 
 for patchX=1:nPatchX
     for patchY=1:nPatchY
-        [cornerTL, cornerBR]=patchCorner(patchX,patchY,patchSizeX,patchSizeY,patchOverlap,sx,sy);
+        [cornerTL, cornerBR]=patchCorner(patchX,patchY,patchSizeX,patchSizeY,patchOverlap,sx,sy,patch_offset);
         col = rand(1,3);
         
-        textToShow=['P' num2str(patchX) num2str(patchY)];
+        textToShow=['P-' num2str(patchX) '-' num2str(patchY)];
         text (0.5*(cornerBR(2)+cornerTL(2))-3, cornerTL(1)+0.5*(cornerBR(1)-cornerTL(1))-2,textToShow,'color',1-[eps eps eps])
         lineW=3;
         if exist('threshold_pca','var')
@@ -40,6 +43,7 @@ for patchX=1:nPatchX
             mmd=max(max(mean(dpix,3)));
             if mmd/maxMeanDataIn<threshold_patchBrightness;
                 lineW=1;
+                nPatch = nPatch + 1;
             else
                 if ~isempty(threshold_pca)
                     [nx,ny,nt]=size(dpix);
@@ -54,6 +58,7 @@ for patchX=1:nPatchX
         addColorBox(cornerTL,cornerBR, col,lineW,1);
     end    
 end
+sprintf('Number of patches considered for evaluation: %g',nPatch)
 end
 
 %%%%%%%%%%%%%%%%%%%
