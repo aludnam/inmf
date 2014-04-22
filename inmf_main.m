@@ -63,12 +63,16 @@ for indexRun=peval.runs
         % Extract patch from the data:
         dpix=dataIn(peval.cornerNW(1):peval.cornerSE(1), peval.cornerNW(2):peval.cornerSE(2),:);
         [peval.nx, peval.ny, peval.nt]=size(dpix);
-
-        % Ignore the patch if not bright enough:
-        mmd=max(max(mean(dpix,3)));
-        if mmd/maxMeanDataIn<peval.threshold_patchBrightness;
+        if isempty(dpix);
             continue
         end
+        
+        % Ignore the patch if not bright enough:
+        mmd=max(max(mean(dpix,3)));
+        if mmd/maxMeanDataIn < peval.threshold_patchBrightness;
+            continue
+        end
+        
 
         % Reshape data into 2D data matrix by concatenating rows of pixels in each frame:
         d=reshape(dpix,peval.nx*peval.ny,peval.nt);

@@ -41,10 +41,12 @@ for patchX=1:nPatchX
         if exist('threshold_pca','var')
             dpix=im(cornerTL(1):cornerBR(1),cornerTL(2):cornerBR(2),:);
             mmd=max(max(mean(dpix,3)));
-            if mmd/maxMeanDataIn<threshold_patchBrightness;
-                lineW=1;
-                nPatch = nPatch + 1;
+            if (mmd/maxMeanDataIn)<threshold_patchBrightness;
+                lineW=1;                
             else
+                nPatch = nPatch + 1;
+                patchX
+                patchY
                 if ~isempty(threshold_pca)
                     [nx,ny,nt]=size(dpix);
                     d=reshape(dpix,nx*ny,nt);

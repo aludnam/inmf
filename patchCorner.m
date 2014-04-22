@@ -16,4 +16,4 @@ else
 end
 
 cornerTL=max((nPatchVec-1).*(patchSizeVec-patchOverlap)+1+offsetBox + offset,[1 1]);% top-left corner
-cornerBR=min(nPatchVec.*patchSizeVec-(nPatchVec-1).*patchOverlap+offsetBox + + offset,[sx,sy]); % bottom-right corner
+cornerBR=min(nPatchVec.*patchSizeVec-(nPatchVec-1).*patchOverlap+offsetBox + offset,[sx,sy]); % bottom-right corner
