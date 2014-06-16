@@ -26,19 +26,20 @@ for ii=1:length(d)
     n=0;
     out=[];
     for jj=1:length(sd)
-        try
+        %try
             load ([resDir '/' d(ii).name '/' sd(jj).name '/w'])
             load ([resDir '/' d(ii).name '/' sd(jj).name '/h'])
             load ([resDir '/' d(ii).name '/' sd(jj).name '/peval'])
-            [outtmp,nxi,nyi]=makeHiRes(w,h,peval.nx,peval.ny,rf,pow);
+            [outtmp,nxi,nyi] = makeHiRes(w,h,peval.nx,peval.ny,rf,pow);
             fprintf '.'
-            wxy=makeWindow(size(outtmp),rf*peval.patchOverlap);
+            wxy = makeWindow(size(outtmp),rf*peval.patchOverlap);
             if n==0
                 out=zeros(nxi,nyi);
             end
-            out = out+wxy.*outtmp;
+            out = out + wxy.*outtmp;
+            %out = max(out,wxy.*outtmp);
             n=n+1;
-        end
+        %end
     end
     out=out/max(n,1);                   % get the mean value of the evaluations
     

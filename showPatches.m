@@ -1,17 +1,19 @@
 function showPatches(im,patchSizeX,patchSizeY,patchOverlap,threshold_pca,threshold_patchBrightness,patch_offset)
 % Shows division of the data into smaller patches. 
 %
-% showPatches(im,patchSizeX,patchSizeY,patchOverlap,threshold_pca,threshold_patchBrightness)
+% showPatches(im,patchSizeX,patchSizeY,patchOverlap,threshold_pca,threshold_patchBrightness,patch_offset)
 % 
 % im: input data
 % patchSizeX: size of the patch
 % patchSizeX: size of the patch
 % patchOverlap: overlap of the patches
 % threshold_pca: (optional) if specified, estiamtes the number of components 
-% in each patch (K) and displays it in the patch
+% in each patch (K) and displays it in the patch, if set to negative K is
+% not estimated.
 % threshold_patchBrightness: (optional) if specified checks the brightness
 % of each patch and compares it to the mean brightness of the data. If
 % below the threshold the patch is ignored. 
+% patch_offset: (optional) offset of each patch (default [0,0])
 
 if ~exist('threshold_patchBrightness','var')
     threshold_patchBrightness=0;
@@ -33,29 +35,29 @@ nPatch = 0;
 for patchX=1:nPatchX
     for patchY=1:nPatchY
         [cornerTL, cornerBR]=patchCorner(patchX,patchY,patchSizeX,patchSizeY,patchOverlap,sx,sy,patch_offset);
-        col = rand(1,3);
-        
-        textToShow=['P-' num2str(patchX) '-' num2str(patchY)];
-        text (0.5*(cornerBR(2)+cornerTL(2))-3, cornerTL(1)+0.5*(cornerBR(1)-cornerTL(1))-2,textToShow,'color',1-[eps eps eps])
+        col = rand(1,3);                       
         lineW=3;
         if exist('threshold_pca','var')
             dpix=im(cornerTL(1):cornerBR(1),cornerTL(2):cornerBR(2),:);
             mmd=max(max(mean(dpix,3)));
             if (mmd/maxMeanDataIn)<threshold_patchBrightness;
-                lineW=1;                
+                lineW=1;
+                colTxt = 'red';
+                col ='red';
             else
-                nPatch = nPatch + 1;
-                patchX
-                patchY
-                if ~isempty(threshold_pca)
+                nPatch = nPatch + 1;                
+                if threshold_pca>0
                     [nx,ny,nt]=size(dpix);
                     d=reshape(dpix,nx*ny,nt);
                     K=estimateK(d,threshold_pca,[patchX,patchY]);
                     figure(fignum)
-                    textToShow=['K=' num2str(K)];
-                    text (0.5*(cornerBR(2)+cornerTL(2))-3, cornerTL(1)+0.5*(cornerBR(1)-cornerTL(1))+2,textToShow,'color',1-[eps eps eps])
+                    textToShowK=['K=' num2str(K)];
+                    text (0.5*(cornerBR(2)+cornerTL(2))-3, cornerTL(1)+0.5*(cornerBR(1)-cornerTL(1))+2,textToShowK,'color',1-[eps eps eps])
                 end
+                colTxt = 'white';
             end
+            textToShow=['P-' num2str(patchX) '-' num2str(patchY)]; 
+            text (0.5*(cornerBR(2)+cornerTL(2))-3, cornerTL(1)+0.5*(cornerBR(1)-cornerTL(1))-2,textToShow,'color',1-[eps eps eps],'Color',colTxt)
         end
         addColorBox(cornerTL,cornerBR, col,lineW,1);
     end    

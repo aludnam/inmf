@@ -1,11 +1,11 @@
 Non-negative matrix factorisation algorithm with iterative restarts (iNMF). 
-Code by Ondrej Mandula, May 2013.  Tested in MATLAB2008b. 
+Code by Ondrej Mandula, June 2014 .  Tested in MATLAB2008b. 
 
 To accompany the paper
 
 "Localisation microscopy with quantum dots using non-negative matrix
 factorisation" by Ondrej Mandula, Ivana Sumanovac, Rainer Heintzmann,
-Christopher K. I. Williams (2013).
+Christopher K. I. Williams (2014).
 
 
 USAGE:
@@ -27,8 +27,8 @@ These are found in the Examples directory.
 
 Example 1)
 
-Run the code example.m. The data is simulated from 8 sources; the true 
-sources are shown in Supplementary Figure S6. peval.Kinput=15 sources are 
+Run the code example_sim.m. The data is simulated from 8 sources; the true 
+sources are shown in Supplementary Figure S10. peval.Kinput=15 sources are 
 specified in the code.
 
 Observe the estimated sources updating over time. Note that after 
@@ -36,22 +36,22 @@ iteration j, sources (j+1) to K are re-initialized to noise.
 
 Example 2) 
 
-Run example_fig3_sim.m. This is simulated data in a # shape, as shown in 
-Fig. 3 (top row) in the paper.  
+Run example_fig1_sim.m. This is simulated data in a # shape, as shown in 
+Fig. 1b in the manuscript.  
 The number of sources is estimated to be 30, based on PCA. 10 runs are 
 carried out, and the results across runs are combined.
 
 Example 3) 
 
-Run example_fig3_exp.m. This is real data of a 18 X 18 pixel region of 
-QD-labelled tubulin, as shown in Fig. 3 (bottom row) in the paper.  
+Run example_fig1_exp.m. This is real data of a 18 X 18 pixel region of 
+QD-labelled tubulin, as shown in Fig. 1c in the manuscript.  
 The number of sources is estimated to be 34, based on PCA. 10 runs are 
 carried out, and the results across runs are combined.
 
 Example 4) 
 
-Run example_fig5.m. This is real data of out-of-focus QDs as shown in 
-Fig. 5 of the paper. 
+Run example_exp.m. This is real data of out-of-focus QDs as shown in 
+Fig. S3b of the paper. 
 The number of sources is estimated to be 22, based on PCA.
 
 LICENCE:

@@ -78,10 +78,13 @@ for indexRun=peval.runs
         d=reshape(dpix,peval.nx*peval.ny,peval.nt);
 
         % Number of sources:
-        if ~isfield(peval, 'Kinput')
-            peval.K=estimateK(d,peval.threshold_pca); % Estimation of the number of sources.
+        
+        if isfield(peval, 'Kinput')
+            peval.K = peval.Kinput;
+        else
+            peval.K = estimateK(d,peval.threshold_pca); % Estimation of the number of sources.
             if isfield(peval, 'Kmax')
-                peval.K=min(peval.K,peval.Kmax);
+                peval.K = min(peval.K,peval.Kmax);
             end
         end
 
